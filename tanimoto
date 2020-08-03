@@ -1,1 +1,5 @@
-
+# smiles_file: .txt 2 columns, chembleID, SMILES #
+def similarity (smiles_file, similarity):
+    return similarity.filter(smiles, similarity)
+    with open("/filepath/some_file_name.txt", "rb") as smiles:
+    similarity = 60
