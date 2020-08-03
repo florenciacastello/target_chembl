@@ -1,5 +1,7 @@
-# smiles_file: .txt 2 columns, chembleID, SMILES #
-def similarity (smiles_file, similarity):
-    return similarity.filter(smiles, similarity)
-    with open("/filepath/some_file_name.txt", "rb") as smiles:
-    similarity = 60
+from chembl_webresource_client.new_client import new_client
+def chembl_similarity (smiles_file, tanimoto_similarity):
+    with open(smiles_file) as handle:
+        smiles = handle.read().strip()
+        return new_client.similarity.filter(smiles = smiles, similarity = tanimoto_similarity)
+
+chembl_similarity("/home/fleer/Desktop/smiles", 60)
