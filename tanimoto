@@ -1,7 +1,23 @@
+import argparse
 from chembl_webresource_client.new_client import new_client
 def chembl_similarity (smiles_file, tanimoto_similarity):
-    with open(smiles_file) as handle:
-        smiles = handle.read().strip()
-        return new_client.similarity.filter(smiles = smiles, similarity = tanimoto_similarity)
+	with open(smiles_file) as handle:
+		smiles = handle.read().strip()
+	return new_client.similarity.filter(smiles = smiles, similarity = tanimoto_similarity)
 
-chembl_similarity("/home/fleer/Desktop/smiles", 60)
+def Main():
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-o','--output', help='Output result file', action="store_true")
+	parser.add_argument('-i','--input', help='Input smiles_file', type=argparse.FileType('r'), required=True)
+	parser.add_argument('-t','--tanimoto', help='Tanimoto similarity', type=int, default=60)
+
+	args = parser.parse_args()
+
+	res = chembl_similarity(args.input, args.tanimoto)
+
+	if args.output:
+		f = open("tanimoto.txt", "a")
+		f.write(str(res))
+
+if __name__=='__main__':
+		Main()
