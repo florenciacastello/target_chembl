@@ -20,4 +20,4 @@ def Main():
 		f.write(str(res))
 
 if __name__=='__main__':
-		Main()
+	Main()
