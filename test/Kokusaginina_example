@@ -1,1 +1,19 @@
 
+Kokusaginina	COC1=C2C(OC=C2)=NC3=CC(OC)=C(OC)C=C31
+
+res tanimoto 60
+	molecule_chembl_id	max_phase	pref_name	similarity	molecule_structures.canonical_smiles
+0	CHEMBL278779	0	KOKUSAGININE	100	COc1cc2nc3occc3c(OC)c2cc1OC
+1	CHEMBL401536	0	EVOLITRINE	66.6666686534882	COc1ccc2c(OC)c3ccoc3nc2c1
+2	CHEMBL486165	0	PTELEINE	66.6666686534882	COc1ccc2nc3occc3c(OC)c2c1
+3	CHEMBL503675	0	MACULINE	65.8536612987518	COc1c2cc3c(cc2nc2occc12)OCO3
+4	CHEMBL549528	0		65.2173936367035	COc1cc2nc3occc3c(OCCCCOc3ccccc3)c2cc1OC
+5	CHEMBL257372	0		65.2173936367035	COc1cc2nc3occc3c(Oc3cccnc3)c2cc1OC
+6	CHEMBL503574	0	CONFUSAMELINE	64.9999976158142	COc1c2ccc(O)cc2nc2occc12
+7	CHEMBL22533	0	DICTAMNINE	63.1578922271729	COc1c2ccccc2nc2occc12
+8	CHEMBL21396	0	SKIMMIANINE	60.0000023841858	COc1ccc2c(OC)c3ccoc3nc2c1OC
+
+
+target
+CHEMBL4818	Voltage-gated potassium channel subunit Kv1.3	SINGLE PROTEIN	9	ion channel  vgc  k  vg k	Mus musculus
+CHEMBL4633	Voltage-gated potassium channel subunit Kv1.3	SINGLE PROTEIN	8	ion channel  vgc  k  vg k	Homo sapiens
