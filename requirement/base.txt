@@ -1,1 +1,7 @@
+# Web Service Client
 
+To help users get started with using the updated ChEMBL web services the existing web service client has also been released. This is written in the Python programming language and is available to install from Python Package Index by typing:
+
+** pip install chembl_webresource_client **
+
+The client code is open and hosted on GitHub: https://github.com/chembl/chembl_webresource_client.
