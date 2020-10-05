@@ -1,1 +1,3 @@
+Chembl DB
+ftp://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/latest/
 
