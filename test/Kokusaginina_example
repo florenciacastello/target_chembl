@@ -1,6 +1,7 @@
 
 Kokusaginina	COC1=C2C(OC=C2)=NC3=CC(OC)=C(OC)C=C31
 
+tanimoto.py
 res tanimoto 60
 	molecule_chembl_id	max_phase	pref_name	similarity		molecule_structures.canonical_smiles
 0	CHEMBL278779		0		KOKUSAGININE	100			COc1cc2nc3occc3c(OC)c2cc1OC
@@ -13,7 +14,7 @@ res tanimoto 60
 7	CHEMBL22533		0		DICTAMNINE	63.1578922271729	COc1c2ccccc2nc2occc12
 8	CHEMBL21396		0		SKIMMIANINE	60.0000023841858	COc1ccc2c(OC)c3ccoc3nc2c1OC
 
-
+mol_trg.py
 target
 CHEMBL4818	Voltage-gated potassium channel subunit Kv1.3	SINGLE PROTEIN	9	ion channel  vgc  k  vg k	Mus musculus
 CHEMBL4633	Voltage-gated potassium channel subunit Kv1.3	SINGLE PROTEIN	8	ion channel  vgc  k  vg k	Homo sapiens
