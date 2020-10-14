@@ -11,7 +11,7 @@ def trg_mol (handle):
     if handle:
         for trg_id in handle:
             trg_id = trg_id.strip()
-            mol_=mol_+list(new_client.activity.filter(target_chembl_id ='CHEMBL4818',
+            mol_=mol_+list(new_client.activity.filter(target_chembl_id =trg_id,
              assay_type = 'B').only("molecule_chembl_id", "canonical_smiles", "pchembl_value",
              "target_organism", "activity_comment"))
     return mol_
@@ -26,6 +26,8 @@ def Main():
     records=trg_mol(args.input)
     if records:
         df = pd.DataFrame.from_dict(json_normalize(records), orient='columns')
+        df.loc[((df['activity_comment'] == 'Active') & (df['pchembl_value'].isnull())), 'pchembl_value'] = 6  #TODO: revisar este filtro
+        df1 = df.dropna(subset=['pchembl_value'])
         def pchembl_median(x):
             names = {
                 'activity_comment': x.iloc[0]['activity_comment'],
@@ -33,13 +35,12 @@ def Main():
                 'pchembl_median': x['pchembl_value'].median(),
             }
             return(pd.Series(names, index = ['pchembl_median', 'activity_comment', 'target_organism']))
-        df_pchembl_median = df.groupby(['molecule_chembl_id', 'canonical_smiles']).apply(pchembl_median).reset_index()
-        df_pchembl_median.loc[((df_pchembl_median['activity_comment'] != 'Not Active')
-         | (df_pchembl_median['activity_comment'] != 'inconclusive')) & (df_pchembl_median['pchembl_median'].isnull()), 'pchembl_median'] = 6
+        df_pchembl_median = df1.groupby(['molecule_chembl_id', 'canonical_smiles']).apply(pchembl_median).reset_index()
         df_drop = df_pchembl_median.drop(df_pchembl_median[df_pchembl_median.pchembl_median < 6].index)
         df_nodup= df_drop.drop_duplicates(subset=['molecule_chembl_id'])
         output=StringIO()
         df_nodup.to_csv(args.output) ;
+    #    print(df)
     else:
     	print('No result', file=sys.stderr)
     	return 0

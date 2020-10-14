@@ -29,16 +29,16 @@ def Main():
     	return 0
 
     df = pd.DataFrame.from_dict(json_normalize(records), orient='columns')
-    df_fin = df[['target_chembl_id', 'activity_comment', 'pchembl_value']]
+#    df_fin = df[['target_chembl_id', 'activity_comment', 'pchembl_value']]
+    df.loc[((df['activity_comment'] == 'Active') & (df['pchembl_value'].isnull())), 'pchembl_value'] = 6  #TODO: revisar este filtro
+    df1 = df.dropna(subset=['pchembl_value'])
     def pchembl_median(x):
         names = {
             'activity_comment': x.iloc[0]['activity_comment'],
             'pchembl_median': x['pchembl_value'].median(),
         }
         return(pd.Series(names, index = ['pchembl_median', 'activity_comment']))
-    df_pchembl_median = df_fin.groupby(['target_chembl_id']).apply(pchembl_median).reset_index()
-    df_pchembl_median.loc[((df_pchembl_median['activity_comment'] != 'Not Active')
-     | (df_pchembl_median['activity_comment'] != 'inconclusive')) & (df_pchembl_median['pchembl_median'].isnull()), 'pchembl_median'] = 6
+    df_pchembl_median = df1.groupby(['target_chembl_id']).apply(pchembl_median).reset_index()
     df_drop = df_pchembl_median.drop(df_pchembl_median[df_pchembl_median.pchembl_median < 6].index)
     df_nodup= df_drop.drop_duplicates(subset=['target_chembl_id'])
     output=StringIO()
