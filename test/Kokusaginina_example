@@ -1,5 +1,5 @@
 
-Kokusaginina	COC1=C2C(OC=C2)=NC3=CC(OC)=C(OC)C=C31
+Kokusaginina	COC1=C2C(OC=C2)=NC3=CC(OC)=C(OC)C=C31 CHEMBL278779 
 
 tanimoto.py
 res tanimoto 60
