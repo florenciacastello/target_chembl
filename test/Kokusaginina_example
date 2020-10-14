@@ -1,8 +1,13 @@
+Example Molecule: 
+		Name: Kokusaginina	
+		SMILES: COC1=C2C(OC=C2)=NC3=CC(OC)=C(OC)C=C31  
+		mol_chembl_ID: CHEMBL278779 
+		trg_chembl_ID (Target of Kokusaginina): CHEMBL4818
 
-Kokusaginina	COC1=C2C(OC=C2)=NC3=CC(OC)=C(OC)C=C31 CHEMBL278779 
 
 tanimoto.py
-res tanimoto 60
+INPUT: SMILES(.txt)
+OUTPUT: (Default 60% Tanimoto score)
 	molecule_chembl_id	max_phase	pref_name	similarity		molecule_structures.canonical_smiles
 0	CHEMBL278779		0		KOKUSAGININE	100			COc1cc2nc3occc3c(OC)c2cc1OC
 1	CHEMBL401536		0		EVOLITRINE	66.6666686534882	COc1ccc2c(OC)c3ccoc3nc2c1
@@ -14,7 +19,21 @@ res tanimoto 60
 7	CHEMBL22533		0		DICTAMNINE	63.1578922271729	COc1c2ccccc2nc2occc12
 8	CHEMBL21396		0		SKIMMIANINE	60.0000023841858	COc1ccc2c(OC)c3ccoc3nc2c1OC
 
+
 mol_trg.py
-target
-CHEMBL4818	Voltage-gated potassium channel subunit Kv1.3	SINGLE PROTEIN	9	ion channel  vgc  k  vg k	Mus musculus
-CHEMBL4633	Voltage-gated potassium channel subunit Kv1.3	SINGLE PROTEIN	8	ion channel  vgc  k  vg k	Homo sapiens
+INPUT: mol_chembl_ID(.txt)
+OUTPUT: 
+molecule_chembl_id	canonical_smiles	pchembl_median	activity_comment	target_organism
+CHEMBL1096380		CC(C)(C)c1[nH]cnc1/C...		6		Active		Homo sapiens
+CHEMBL116438		COc1cc(/C=C/C(=O)/C=...		6		Active		Homo sapiens
+CHEMBL1165293		C[C@H](CCCCC(=O)Nc1c...		6		Active		Homo sapiens
+CHEMBL1171465		CCCCCCCC(=O)SCC/C=C/...		6		Active		Homo sapiens
+CHEMBL1171466		CCCCCCCC(=O)SCC/C=C/...		6		Active		Homo sapiens
+CHEMBL1173194		CCCCCCCC(=O)SCC/C=C/...		6		Active		Homo sapiens
+...
+### CHEMBL278779		COc1cc2nc3occc3c(OC)c2cc1OC	6.09				Homo sapiens
+...
+
+trg_trg.py
+INPUT: trg_chembl_ID(.txt)
+OUTPUT: 
