@@ -44,7 +44,6 @@ def Main():
     output=StringIO()
     df_nodup.to_csv(args.output) ;
 
-#    print(df_nodup)
 
 if __name__=='__main__':
 		Main()

@@ -32,9 +32,10 @@ def Main():
             names = {
                 'activity_comment': x.iloc[0]['activity_comment'],
                 'target_organism': x.iloc[0]['target_organism'],
-                'pchembl_median': x['pchembl_value'].median(),
+                'pchembl_median': x['pchembl_value'].median()
             }
             return(pd.Series(names, index = ['pchembl_median', 'activity_comment', 'target_organism']))
+
         df_pchembl_median = df1.groupby(['molecule_chembl_id', 'canonical_smiles']).apply(pchembl_median).reset_index()
         df_drop = df_pchembl_median.drop(df_pchembl_median[df_pchembl_median.pchembl_median < 6].index)
         df_nodup= df_drop.drop_duplicates(subset=['molecule_chembl_id'])
