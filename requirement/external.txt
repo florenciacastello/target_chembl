@@ -1,3 +1,6 @@
-Chembl DB
+Chembl DB 
+
+ChEMBL Database downloads, which includes Oracle, MySQL and PostgreSQL versions of the ChEMBL database, as well as SDF, FASTA and release note files. You will need it to search by pfam ID
+
 ftp://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/latest/
 
