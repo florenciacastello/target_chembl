@@ -23,6 +23,9 @@ OUTPUT: .csv (Default 60% Tanimoto score)
 mol_trg.py
 INPUT: mol_chembl_ID(.txt)
 OUTPUT: .csv
+target_chembl_id	pchembl_median	activity_comment
+CHEMBL2095182		6.09	
+CHEMBL612545		6		Active
 
 
 
