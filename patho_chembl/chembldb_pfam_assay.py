@@ -82,7 +82,7 @@ def Main():
     args = parser.parse_args()
 
     db='sqlite:///'+ os.path.abspath(args.dataset)
-    print(db)
+
     if args.dataset:
         df_targets=search_bypfam(db)
         if len(df_targets):
