@@ -1,22 +1,16 @@
-import pandas as pd
-from pandas import json_normalize
-import json
-import argparse
-import sys
-import csv
-from importlib import reload
 
 def load_dataset(dataset_path):
     base_pfam= pd.read_csv(dataset_path)
-    base_pfam['compound_chemblid']=[eval(x) for x in base_pfam.compound_chemblid]
+    base_pfam['compound_chemblid']=[x.replace("[", "").replace("]", "").replace(" ", "").replace("'", "").split(",") for x in base_pfam.compound_chemblid]
     return base_pfam
+    #return None
 
-def search_bypfam(handle, base_pfam):
+def search_bypfam(pfams, base_pfam):
     confiable=[]
     target_domains=[]
     dudoso=[]
-    if handle:
-        for pfam_id in handle:
+    if pfams:
+        for pfam_id in pfams:
             pfam_id = pfam_id.strip()
             target_domains.append(pfam_id)
             for _,record in base_pfam.iterrows():
@@ -27,9 +21,10 @@ def search_bypfam(handle, base_pfam):
         df_base_pfam=base_pfam[base_pfam.Domain_key=="_".join(sorted(set(target_domains)))]
         for compuestos in df_base_pfam.compound_chemblid:
             confiable=confiable + compuestos
-            confiable=set(confiable)
-            dudoso=set(dudoso)-confiable
+        confiable=set(confiable)
+        dudoso=set(dudoso)-confiable
     return confiable, dudoso
+
 
 def Main():
     parser = argparse.ArgumentParser()
@@ -42,14 +37,13 @@ def Main():
     args = parser.parse_args()
 
  #mejorar la salida, agregar target de donde saco el pfam. o la domain_key
-
-    for pfam in args.input:
-        if pfam:
-            drugs= search_bypfam(pfam, load_dataset(args.dataset))
-            if drugs:
-                args.output.write(str(drugs)+ '\n')
-            else:
-                print(f'No result for {pfam}', file=sys.stderr)
+    pfams=[x.strip() for x in args.input if x.strip()]
+    trusted, not_trusted= search_bypfam(pfams, load_dataset(args.dataset))
+    if trusted:
+        for compound in trusted:
+            args.output.write(str(compound)+ '\n')
+    else:
+        print(f'No result for {pfam}', file=sys.stderr)
 
     return 0
 
