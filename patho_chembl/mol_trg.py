@@ -12,8 +12,11 @@ def chembl_trg (handle):
     if handle:
         for molecule_chembl_id in handle:
             molecule_chembl_id = molecule_chembl_id.strip()
-            trg_info=trg_info+list(new_client.activity.filter(molecule_chembl_id=molecule_chembl_id,
+            trg_1=list(new_client.activity.filter(molecule_chembl_id=molecule_chembl_id,
             assay_type = 'B').only('target_chembl_id', 'activity_comment', 'pchembl_value'))
+            trg_2=list(new_client.mechanism.filter(molecule_chembl_id =trg_id, max_phase__in = [3, 4]
+            ).only("target_chembl_id", "max_phase"))
+            trg_info=trg_info+trg_1+trg_2
     return trg_info
 
 def Main():
@@ -29,15 +32,16 @@ def Main():
     	return 0
 
     df = pd.DataFrame.from_dict(json_normalize(records), orient='columns')
-#    df_fin = df[['target_chembl_id', 'activity_comment', 'pchembl_value']]
     df.loc[((df['activity_comment'] == 'Active') & (df['pchembl_value'].isnull())), 'pchembl_value'] = 6  #TODO: revisar este filtro
+    df.loc[((df['max_phase'].notnull())), 'pchembl_value'] = 6
     df1 = df.dropna(subset=['pchembl_value'])
     def pchembl_median(x):
         names = {
             'activity_comment': x.iloc[0]['activity_comment'],
+            'max_phase': x.iloc[0]['max_phase'],
             'pchembl_median': x['pchembl_value'].median(),
         }
-        return(pd.Series(names, index = ['pchembl_median', 'activity_comment']))
+        return(pd.Series(names, index = ['pchembl_median', 'activity_comment', 'max_phase']))
     df_pchembl_median = df1.groupby(['target_chembl_id']).apply(pchembl_median).reset_index()
     df_drop = df_pchembl_median.drop(df_pchembl_median[df_pchembl_median.pchembl_median < 6].index)
     df_nodup= df_drop.drop_duplicates(subset=['target_chembl_id'])

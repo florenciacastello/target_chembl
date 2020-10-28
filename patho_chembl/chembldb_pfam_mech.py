@@ -12,12 +12,6 @@ import sqlite3
 from importlib import reload
 import os
 
-#def load_dataset(dataset_path):
-#    chembl = dataset_path
-#    engine = create_engine(dataset_path)
-#    CHEMBL_VERSION = 27
-#    return engine
-
 def search_bypfam(dataset_path):
     engine = create_engine(dataset_path)
     CHEMBL_VERSION = 27
@@ -33,11 +27,8 @@ def search_bypfam(dataset_path):
     JOIN molecule_dictionary md ON md.molregno = dm.molregno
     JOIN compound_properties cp ON cp.molregno = md.molregno
     JOIN compound_records cr ON cr.molregno = cp.molregno
-    WHERE a2.src_id = 15
-    AND a2.standard_type = 'IC50'
-    AND dm.mec_id IS NOT NULL
+    WHERE dm.mec_id IS NOT NULL
     AND a2.activity_comment LIKE 'Active'
-    AND cp.PSA IS NOT NULL
     UNION
     SELECT td.chembl_id as target_chemblid, a2.pchembl_value, a2.activity_comment,
     md.chembl_id as compound_chemblid, source_domain_id, dm.mec_id
@@ -51,10 +42,24 @@ def search_bypfam(dataset_path):
     JOIN compound_properties cp ON cp.molregno = md.molregno
     JOIN compound_records cr ON cr.molregno = cp.molregno
     WHERE a2.src_id = 15
-    AND a2.standard_type = 'IC50'
     AND dm.mec_id IS NOT NULL
     AND a2.pchembl_value >= 6.0
-    AND cp.PSA IS NOT NULL; ''')
+    AND cp.PSA IS NOT NULL
+    UNION
+    SELECT td.chembl_id as target_chemblid, a2.pchembl_value, a2.activity_comment,
+    md.chembl_id as compound_chemblid, source_domain_id, dm.mec_id
+    FROM drug_mechanism dm
+    JOIN binding_sites bs on bs.tid = dm.tid
+    JOIN target_dictionary td ON td.tid = bs.tid
+    JOIN site_components sc ON sc.site_id =bs.site_id
+    JOIN domains d2 ON d2.domain_id = sc.domain_id
+    JOIN activities a2 ON dm.molregno = a2.molregno
+    JOIN molecule_dictionary md ON md.molregno = dm.molregno
+    JOIN compound_properties cp ON cp.molregno = md.molregno
+    JOIN compound_records cr ON cr.molregno = cp.molregno
+    WHERE md.max_phase >= 3.0
+    AND dm.mec_id IS NOT NULL; ''')
+
     df_mol = pd.read_sql(find_molbypfam, engine)
     return df_mol
 
@@ -88,8 +93,6 @@ def Main():
         print(f'No database', file=sys.stderr)
 
     return 0
-
-#vscodesqlite3.connect
 
 if __name__=='__main__':
 		Main()

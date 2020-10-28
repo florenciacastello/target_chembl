@@ -1,3 +1,10 @@
+import pandas as pd
+from pandas import json_normalize
+import json
+import argparse
+import sys
+import csv
+from importlib import reload
 
 def load_dataset(dataset_path):
     base_pfam= pd.read_csv(dataset_path)
@@ -43,7 +50,7 @@ def Main():
         for compound in trusted:
             args.output.write(str(compound)+ '\n')
     else:
-        print(f'No result for {pfam}', file=sys.stderr)
+        print(f'No result', file=sys.stderr)
 
     return 0
 

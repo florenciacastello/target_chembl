@@ -50,7 +50,7 @@ def Main():
         for compound in trusted:
             args.output.write(str(compound)+ '\n')
     else:
-        print(f'No result for {pfam}', file=sys.stderr)
+        print(f'No result', file=sys.stderr)
 
     return 0
 

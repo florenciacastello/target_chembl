@@ -39,15 +39,10 @@ def search_bypfam(dataset_path):
     JOIN compound_records ON a.record_ID = compound_records.record_ID
     WHERE a.pchembl_value >= 6.0
     AND (a.potential_duplicate = 0 OR a.potential_duplicate IS NULL)
-    AND a.data_validity_comment IS NULL
     AND assay_type = 'B'
-    AND d.psa IS NOT NULL
     UNION
-    SELECT g.chembl_id as target_chemblid,
-    source_domain_id,
-    c.chembl_id as compound_chemblid,
-    a.pchembl_value,
-    a.activity_comment
+    SELECT g.chembl_id as target_chemblid, source_domain_id, c.chembl_id as compound_chemblid,
+    a.pchembl_value, a.activity_comment
     FROM  ACTIVITIES a
     JOIN MOLECULE_HIERARCHY b ON a.MOLREGNO = b.MOLREGNO
     JOIN MOLECULE_DICTIONARY c ON b.PARENT_MOLREGNO = c.MOLREGNO
@@ -64,9 +59,7 @@ def search_bypfam(dataset_path):
     JOIN compound_records ON a.record_ID = compound_records.record_ID
     WHERE  a.activity_comment LIKE 'Active'
     AND (a.potential_duplicate = 0 OR a.potential_duplicate IS NULL)
-    AND a.data_validity_comment IS NULL
     AND assay_type = 'B'
-    AND d.psa IS NOT NULL
     AND g.target_type IN ('SINGLE PROTEIN', 'PROTEIN COMPLEX');  ''')
     df_mol = pd.read_sql(find_molbypfam, engine)
     return df_mol
