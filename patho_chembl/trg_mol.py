@@ -12,7 +12,7 @@ def trg_mol (handle):
         for trg_id in handle:
             trg_id = trg_id.strip()
             mol_1=list(new_client.activity.filter(target_chembl_id =trg_id,
-             assay_type = 'B').only("molecule_chembl_id", "canonical_smiles", "pchembl_value",
+             assay_type = 'B').only("target_chembl_id", "molecule_chembl_id", "canonical_smiles", "pchembl_value",
              "target_organism", "activity_comment"))
             mol_2=list(new_client.mechanism.filter(target_chembl_id =trg_id, max_phase__in = [3, 4]
             ).only("molecule_chembl_id", "max_phase"))
@@ -45,7 +45,7 @@ def Main():
         df_drop = df_pchembl_median.drop(df_pchembl_median[df_pchembl_median.pchembl_median < 6].index)
         df_nodup= df_drop.drop_duplicates(subset=['molecule_chembl_id'])
         output=StringIO()
-        df_nodup.to_csv(args.output) ;
+        df_nodup.to_csv(args.output, sep='\t') ;
 
     else:
     	print('No result', file=sys.stderr)
