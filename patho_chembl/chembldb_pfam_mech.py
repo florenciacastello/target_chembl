@@ -17,7 +17,7 @@ def search_bypfam(dataset_path):
     CHEMBL_VERSION = 27
     find_molbypfam = ('''SELECT td.chembl_id as target_chemblid, a2.pchembl_value,
     a2.activity_comment, md.chembl_id as compound_chemblid, source_domain_id,
-    dm.mec_id
+    dm.mec_id, max_phase
     FROM drug_mechanism dm
     JOIN binding_sites bs on bs.tid = dm.tid
     JOIN target_dictionary td ON td.tid = bs.tid
@@ -31,7 +31,7 @@ def search_bypfam(dataset_path):
     AND a2.activity_comment LIKE 'Active'
     UNION
     SELECT td.chembl_id as target_chemblid, a2.pchembl_value, a2.activity_comment,
-    md.chembl_id as compound_chemblid, source_domain_id, dm.mec_id
+    md.chembl_id as compound_chemblid, source_domain_id, dm.mec_id, max_phase
     FROM drug_mechanism dm
     JOIN binding_sites bs on bs.tid = dm.tid
     JOIN target_dictionary td ON td.tid = bs.tid
@@ -47,7 +47,7 @@ def search_bypfam(dataset_path):
     AND cp.PSA IS NOT NULL
     UNION
     SELECT td.chembl_id as target_chemblid, a2.pchembl_value, a2.activity_comment,
-    md.chembl_id as compound_chemblid, source_domain_id, dm.mec_id
+    md.chembl_id as compound_chemblid, source_domain_id, dm.mec_id, max_phase
     FROM drug_mechanism dm
     JOIN binding_sites bs on bs.tid = dm.tid
     JOIN target_dictionary td ON td.tid = bs.tid
@@ -76,21 +76,19 @@ def Main():
     db='sqlite:///'+ os.path.abspath(args.dataset)
 
     if args.dataset:
+        print('Database is being generated. This may take 5-10min', file=sys.stderr)
         df_targets=search_bypfam(db)
+        df_targets.to_csv("/tmp/mech.csv")
         if len(df_targets):
             df_drop=df_targets.drop_duplicates(subset= ['target_chemblid', 'source_domain_id', 'compound_chemblid'])
-            grouped_df = df_drop.groupby("target_chemblid")
-            grouped_pfam = grouped_df["source_domain_id"].apply(list)
-            grouped_df = df_drop.groupby("target_chemblid")
-            grouped_pfam = grouped_df["source_domain_id"].apply(list)
+            grouped_df = df_drop.groupby(["target_chemblid", "compound_chemblid"])
+            grouped_pfam = grouped_df.agg({'source_domain_id':list, 'max_phase':'max'})
             grouped_pfam = grouped_pfam.reset_index()
-            grouped_pfam['Domain_key']=['_'.join(sorted(set(x))) for x in grouped_pfam.source_domain_id]
-            grouped_compound = grouped_df["compound_chemblid"].apply(list)
-            grouped_compound = grouped_compound.reset_index()
-            result = pd.merge(grouped_compound, grouped_pfam,  how='left', on=['target_chemblid'])
+            grouped_pfam['Domain_key']=['|'.join(sorted(set(x))) for x in grouped_pfam.source_domain_id]
+            result = grouped_pfam
             result.to_csv(args.output) ;
     else:
-        print(f'No database', file=sys.stderr)
+        print('No database', file=sys.stderr)
 
     return 0
 
