@@ -77,6 +77,7 @@ def Main():
     db='sqlite:///'+ os.path.abspath(args.dataset)
 
     if args.dataset:
+        print('Database is being generated. This may take 5-10min', file=sys.stderr)
         df_targets=search_bypfam(db)
         if len(df_targets):
             df_drop=df_targets.drop_duplicates(subset= ['target_chemblid', 'source_domain_id', 'compound_chemblid'])
