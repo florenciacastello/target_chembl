@@ -29,6 +29,9 @@ def Main():
     records=trg_mol(args.input)
     if records:
         df = pd.DataFrame.from_dict(json_normalize(records), orient='columns')
+        if 'max_phase' not in df.columns:
+            df['max_phase'] = None
+
         df.loc[((df['activity_comment'] == 'Active') & (df['pchembl_value'].isnull())), 'pchembl_value'] = 6  #TODO: revisar este filtro |
         df.loc[((df['max_phase'].notnull())), 'pchembl_value'] = 6
         df1 = df.dropna(subset=['pchembl_value'])
