@@ -2,7 +2,7 @@
 import setuptools
 
 setuptools.setup(name='target_chembl',
-		version='0.0.5',
+		version='0.0.6',
 		scripts=['patho_chembl/chembldb_pfam_mech.py', 'patho_chembl/chembldb_pfam_assay.py', 'patho_chembl/mol_trg.py', 'patho_chembl/pfam_df_update.py', 'patho_chembl/pfam_mol_assay.py',
     		'patho_chembl/pfam_mol_mech.py', 'patho_chembl/pfam_trg_sql_assay.py', 'patho_chembl/pfam_trg_sql_mecanism.py', 'patho_chembl/tanimoto.py', 'patho_chembl/trg_mol.py', 'patho_chembl/trg_mol_funcion.py'],
 
