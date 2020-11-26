@@ -6,8 +6,7 @@ import sys
 import csv
 from importlib import reload
 
-def load_dataset(dataset_path):
-    base_pfam= pd.read_csv(dataset_path)
+def fix_dataset(base_pfam):
     base_pfam['compound_chemblid']=[x.replace("[", "").replace("]", "").replace(" ", "").replace("'", "").split(",") for x in base_pfam.compound_chemblid]
     return base_pfam
     #return None
@@ -45,7 +44,8 @@ def Main():
 
  #mejorar la salida, agregar target de donde saco el pfam. o la domain_key
     pfams=[x.strip() for x in args.input if x.strip()]
-    trusted, not_trusted= search_bypfam(pfams, load_dataset(args.dataset))
+    base_pfam= pd.read_csv(args.dataset)
+    trusted, not_trusted= search_bypfam(pfams, fix_dataset(base_pfam))
     if trusted:
         for compound in trusted:
             args.output.write(str(compound)+ '\n')
